@@ -18,7 +18,8 @@
           <div class="text-center mb-4">
             <h1 class="fw-bold">YOLO Object Detector</h1>
             <p class="text-muted">
-              Upload an image and detect objects using a pretrained YOLOv8n model.
+              Upload an image and detect objects using a pretrained YOLOv8n
+              model.
             </p>
           </div>
 
@@ -95,6 +96,15 @@
                         class="img-fluid rounded border"
                         alt="Detection result"
                       />
+
+                      {% if result_filename %}
+                        <a
+                          href="{% url 'download_result' result_filename %}"
+                          class="btn btn-success w-100 mt-3"
+                        >
+                          Download Annotated Image
+                        </a>
+                      {% endif %}
                     </div>
                   </div>
                 </div>

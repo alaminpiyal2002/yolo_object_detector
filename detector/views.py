@@ -2,6 +2,7 @@ from pathlib import Path
 
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
+from django.http import FileResponse, Http404
 from django.shortcuts import render
 from PIL import Image, UnidentifiedImageError
 
@@ -61,9 +62,24 @@ def home(request):
                     + "results/"
                     + detection_result["result_filename"]
                 )
+                context["result_filename"] = detection_result["result_filename"]
                 context["detections"] = detection_result["detections"]
 
             except Exception:
                 context["error"] = "Object detection failed. Please try another image."
 
     return render(request, "detector/index.html", context)
+
+
+def download_result(request, filename):
+    safe_filename = Path(filename).name
+    file_path = settings.MEDIA_ROOT / "results" / safe_filename
+
+    if not file_path.exists():
+        raise Http404("File not found.")
+
+    return FileResponse(
+        open(file_path, "rb"),
+        as_attachment=True,
+        filename=safe_filename,
+    )
