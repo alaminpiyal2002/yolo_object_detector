@@ -14,21 +14,23 @@
   <body class="bg-light">
     <main class="container py-5">
       <div class="row justify-content-center">
-        <div class="col-lg-7">
-          <div class="card shadow-sm border-0">
-            <div class="card-body p-5">
-              <h1 class="text-center mb-3">YOLO Object Detector</h1>
+        <div class="col-lg-10">
+          <div class="text-center mb-4">
+            <h1 class="fw-bold">YOLO Object Detector</h1>
+            <p class="text-muted">
+              Upload an image and detect objects using a pretrained YOLOv8n model.
+            </p>
+          </div>
 
-              <p class="text-center text-muted mb-4">
-                Upload an image and detect objects using a pretrained YOLOv8n
-                model.
-              </p>
-
+          <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body p-4 p-md-5">
               <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
 
                 <div class="mb-3">
-                  <label for="image" class="form-label">Choose an image</label>
+                  <label for="image" class="form-label fw-semibold">
+                    Choose an image
+                  </label>
                   <input
                     class="form-control"
                     type="file"
@@ -37,6 +39,9 @@
                     accept="image/*"
                     required
                   />
+                  <div class="form-text">
+                    Supported formats: JPG, JPEG, PNG, WEBP
+                  </div>
                 </div>
 
                 <button type="submit" class="btn btn-primary w-100">
@@ -44,64 +49,92 @@
                 </button>
               </form>
 
-              {% if uploaded_image_name %}
-                <div class="alert alert-success mt-4" role="alert">
-                  Image received successfully:
-                  <strong>{{ uploaded_image_name }}</strong>
-                </div>
-              {% endif %}
-
               {% if error %}
-                <div class="alert alert-danger mt-4" role="alert">
+                <div class="alert alert-danger mt-4 mb-0" role="alert">
                   {{ error }}
                 </div>
               {% endif %}
 
+              {% if uploaded_image_name %}
+                <div class="alert alert-success mt-4 mb-0" role="alert">
+                  Image processed successfully:
+                  <strong>{{ uploaded_image_name }}</strong>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+
+          {% if uploaded_image_url or result_image_url %}
+            <div class="row g-4">
               {% if uploaded_image_url %}
-                <div class="mt-4">
-                  <h5>Uploaded Image Preview</h5>
-                  <img
-                    src="{{ uploaded_image_url }}"
-                    class="img-fluid rounded border"
-                    alt="Uploaded image"
-                  />
+                <div class="col-md-6">
+                  <div class="card shadow-sm border-0 h-100">
+                    <div class="card-header bg-white fw-semibold">
+                      Uploaded Image
+                    </div>
+                    <div class="card-body">
+                      <img
+                        src="{{ uploaded_image_url }}"
+                        class="img-fluid rounded border"
+                        alt="Uploaded image"
+                      />
+                    </div>
+                  </div>
                 </div>
               {% endif %}
 
               {% if result_image_url %}
-                <div class="mt-4">
-                  <h5>Detection Result</h5>
-                  <img
-                    src="{{ result_image_url }}"
-                    class="img-fluid rounded border"
-                    alt="Detection result"
-                  />
+                <div class="col-md-6">
+                  <div class="card shadow-sm border-0 h-100">
+                    <div class="card-header bg-white fw-semibold">
+                      Detection Result
+                    </div>
+                    <div class="card-body">
+                      <img
+                        src="{{ result_image_url }}"
+                        class="img-fluid rounded border"
+                        alt="Detection result"
+                      />
+                    </div>
+                  </div>
                 </div>
               {% endif %}
+            </div>
+          {% endif %}
 
-              {% if detections %}
-                <div class="mt-4">
-                  <h5>Detected Objects</h5>
+          {% if result_image_url %}
+            <div class="card shadow-sm border-0 mt-4">
+              <div class="card-header bg-white fw-semibold">
+                Detected Objects
+              </div>
 
-                  <ul class="list-group">
+              <div class="card-body">
+                {% if detections %}
+                  <ul class="list-group list-group-flush">
                     {% for detection in detections %}
                       <li
-                        class="list-group-item d-flex justify-content-between align-items-center"
+                        class="list-group-item d-flex justify-content-between align-items-center px-0"
                       >
-                        <span>{{ detection.label }}</span>
+                        <span class="text-capitalize">
+                          {{ detection.label }}
+                        </span>
                         <span class="badge bg-primary rounded-pill">
                           {{ detection.confidence }}%
                         </span>
                       </li>
                     {% endfor %}
                   </ul>
-                </div>
-              {% endif %}
+                {% else %}
+                  <p class="text-muted mb-0">
+                    No high-confidence objects were detected.
+                  </p>
+                {% endif %}
+              </div>
             </div>
-          </div>
+          {% endif %}
 
-          <p class="text-center text-muted mt-3 small">
-            Django + YOLOv8n + Ultralytics
+          <p class="text-center text-muted mt-4 small">
+            Built with Django, Bootstrap, Ultralytics, and pretrained YOLOv8n.
           </p>
         </div>
       </div>
