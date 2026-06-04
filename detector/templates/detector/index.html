@@ -10,6 +10,7 @@
       rel="stylesheet"
     />
   </head>
+
   <body class="bg-light">
     <main class="container py-5">
       <div class="row justify-content-center">
@@ -17,6 +18,7 @@
           <div class="card shadow-sm border-0">
             <div class="card-body p-5">
               <h1 class="text-center mb-3">YOLO Object Detector</h1>
+
               <p class="text-center text-muted mb-4">
                 Upload an image and detect objects using a pretrained YOLOv8n
                 model.
@@ -43,25 +45,58 @@
               </form>
 
               {% if uploaded_image_name %}
-              <div class="alert alert-success mt-4" role="alert">
-                Image received successfully:
-                <strong>{{ uploaded_image_name }}</strong>
-              </div>
-              {% endif %} {% if uploaded_image_url %}
-              <div class="mt-4">
-                <h5>Uploaded Image Preview</h5>
-                <img
-                  src="{{ uploaded_image_url }}"
-                  class="img-fluid rounded border"
-                  alt="Uploaded image"
-                />
-              </div>
-              {% endif %} {% if error %}
-              <div class="alert alert-danger mt-4" role="alert">
-                {{ error }}
-              </div>
+                <div class="alert alert-success mt-4" role="alert">
+                  Image received successfully:
+                  <strong>{{ uploaded_image_name }}</strong>
+                </div>
               {% endif %}
-              
+
+              {% if error %}
+                <div class="alert alert-danger mt-4" role="alert">
+                  {{ error }}
+                </div>
+              {% endif %}
+
+              {% if uploaded_image_url %}
+                <div class="mt-4">
+                  <h5>Uploaded Image Preview</h5>
+                  <img
+                    src="{{ uploaded_image_url }}"
+                    class="img-fluid rounded border"
+                    alt="Uploaded image"
+                  />
+                </div>
+              {% endif %}
+
+              {% if result_image_url %}
+                <div class="mt-4">
+                  <h5>Detection Result</h5>
+                  <img
+                    src="{{ result_image_url }}"
+                    class="img-fluid rounded border"
+                    alt="Detection result"
+                  />
+                </div>
+              {% endif %}
+
+              {% if detections %}
+                <div class="mt-4">
+                  <h5>Detected Objects</h5>
+
+                  <ul class="list-group">
+                    {% for detection in detections %}
+                      <li
+                        class="list-group-item d-flex justify-content-between align-items-center"
+                      >
+                        <span>{{ detection.label }}</span>
+                        <span class="badge bg-primary rounded-pill">
+                          {{ detection.confidence }}%
+                        </span>
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endif %}
             </div>
           </div>
 
