@@ -19,3 +19,6 @@ media/results/*
 
 # macOS
 .DS_Store
+
+# Model weights
+*.pt
