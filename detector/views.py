@@ -1,5 +1,5 @@
-from django.http import HttpResponse
+from django.shortcuts import render
 
 
 def home(request):
-    return HttpResponse("YOLO Object Detector homepage is working.")
+    return render(request, "detector/index.html")
