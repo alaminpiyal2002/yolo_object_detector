@@ -13,6 +13,27 @@ The application returns an annotated image containing detected objects, bounding
 This project is intentionally kept simple and focused on the core AI inference pipeline without unnecessary over-engineering.
 
 ---
+ 
+## User Flow
+ 
+```mermaid
+flowchart TD
+    A([ Open Application in Browser]) --> B[ Select an Image File]
+    B --> C[ Click Detect Objects]
+    C --> D{Valid Image?}
+    D -- No --> E([ Show Error Message])
+    D -- Yes --> F[ Save Image to media/uploads/]
+    F --> G[ Load Pretrained YOLOv8n Model]
+    G --> H[ Run Inference on Image]
+    H --> I[ Extract Bounding Boxes, Labels & Confidence Scores]
+    I --> J[ Generate Annotated Result Image]
+    J --> K[ Save Result to media/results/]
+    K --> L[ Display Original & Annotated Image]
+    L --> M[ Show Detected Object Summary]
+    M --> N([ Download Annotated Image])
+```
+ 
+---
 
 ## Features
 
